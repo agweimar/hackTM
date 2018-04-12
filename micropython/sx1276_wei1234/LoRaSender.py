@@ -1,4 +1,5 @@
 from time import sleep
+from config_lora import uuid
 import machine
 
 def send(lora):
@@ -6,7 +7,7 @@ def send(lora):
     print("LoRa Sender")
 
     while True:
-        payload = '{0}'.format(counter)
+        payload = '{0},{1}'.format(NODE_NAME, counter)
         print("Sending packet: \n{}\n".format(payload))
         lora.println(payload) 
         
