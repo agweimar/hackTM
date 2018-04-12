@@ -7,7 +7,7 @@ def send(lora):
     print("LoRa Sender")
 
     while True:
-        payload = '{0},{1}'.format(NODE_NAME, counter)
+        payload = '{0},{1}'.format(uuid, counter)
         print("Sending packet: \n{}\n".format(payload))
         lora.println(payload) 
         
