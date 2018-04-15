@@ -29,13 +29,14 @@ class SHTC1_Sensor:
 
     def _i2c_read_words_from_cmd(self, command, delay, reply_size):
         """Run an SGP command query, get a reply and CRC results if necessary"""
+        # a word consists of two bytes and is followed by a crc checksum
         self.i2c.writeto(self.address, bytes(command))
 
         time.sleep(delay)
         if not reply_size:
             return None
         crc_result = self.i2c.readfrom(self.address, reply_size*3)
-        #print("\tRaw Read: ", crc_result)
+
         result = []
         for i in range(reply_size):
             word = [crc_result[3*i], crc_result[3*i+1]]
@@ -43,10 +44,10 @@ class SHTC1_Sensor:
             if self._generate_crc(word) != crc:
                 raise RuntimeError('CRC Error')
             result.append(word[0] << 8 | word[1])
-        #print("\tOK Data: ", [hex(i) for i in result])
+
         return result
 
-    # pylint: disable=no-self-use
+
     def _generate_crc(self, data):
         """8-bit CRC algorithm for checking data"""
         crc = 0xFF
