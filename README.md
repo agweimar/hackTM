@@ -36,3 +36,9 @@ In addition to the previously mentioned features extra pins can be found on the 
 They include the power pins (5V, 3.3V and GND - 5V may be limited to USB use) as well as the I2C pins SDA and SCL (3.3V level). Furthermore 4 GPIOs are broken out. Those can be used for a wide variety of scenarios.
 All of them can be configured via software to be digital or analogue for different I/O devices. These pins could also be used as an SPI bus.
 
+## Quickstart esp32
+
+In order to copy files to the board you could use different libaries.
+
+### mpy utils  
+[mpy-utils](https://github.com/nickzoic/mpy-utils) establish a Filesystem in userspace connection to the board and allow you to change files directly on the board. (very handy)
