@@ -15,3 +15,4 @@ done
 
 ampy -b 115200 -p /dev/ttyUSB0 reset
 
+echo "Finished"

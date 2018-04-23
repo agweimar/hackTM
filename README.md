@@ -41,4 +41,4 @@ All of them can be configured via software to be digital or analogue for differe
 In order to copy files to the board you could use different libaries.
 
 ### mpy utils  
-[mpy-utils](https://github.com/nickzoic/mpy-utils) establish a Filesystem in userspace connection to the board and allow you to change files directly on the board. (very handy)
+[mpy-utils](https://github.com/nickzoic/mpy-utils) establish a Filesystem in userspace connection to the board and allow you to change files directly on the board. (very handy)bla
