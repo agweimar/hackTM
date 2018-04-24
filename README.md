@@ -8,7 +8,7 @@ The sensor board/shield holds three major components, namely:
 
 A top view of the board is shown below:
 
-![Top_View_Board](../master/hackTM/pcb/PCB_Top_View.png)
+![Top_View_Board](pcb/PCB_Top_View.png)
 
 
 ### ESP32  
