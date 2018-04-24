@@ -27,7 +27,7 @@ Side note: The Sensirion sensors are powered with 1.8V. The electrical component
 ![Top_View_Board](pcb/PCB_Bottom_View.png)
 
 ## PIR
-The PIR sensor is placed on the right side of the sensor board. It produces a digital Signal (TODO high oder low??? ) whenever a motion was detected. The sensor is internally powered by 3.3V. This voltage is generated on the PIR board by a voltage regulator.
+The PIR sensor is placed on the right side of the sensor board. It produces a digital Signal (logic high) whenever a motion was detected. The sensor is internally powered by 3.3V. This voltage is generated on the PIR board by a voltage regulator.
 The solder jumper labeled 'V_In' on the right side selects the input voltage - either 5V or 3.3V. Keep in mind that the 5V is only 'stable' when powered via USB.
 Another (prefered and thus default) way to power the PIR Board is the second socket strip on the lower side. Originally those pins are designed to select the trigger mode (explained later). However, the outer two pins are connected to ground and 3.3V of the PIR sensor.
 This enables the option to surpass the PIR's voltage regulator and save energy by directly supplying 3.3V.  
