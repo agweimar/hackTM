@@ -38,7 +38,19 @@ All of them can be configured via software to be digital or analogue for differe
 
 ## Quickstart esp32
 
+Of course you can use your favourite IDE or even a simple text editor to code. However, below are a few suggestions of tools, that could make your life much easier.  
 In order to copy files to the board you could use different libaries.
 
 ### mpy utils  
-[mpy-utils](https://github.com/nickzoic/mpy-utils) establish a Filesystem in userspace connection to the board and allow you to change files directly on the board. (very handy)bla
+[mpy-utils](https://github.com/nickzoic/mpy-utils) establishes a Filesystem in userspace connection to the board and allow you to change files directly on the board. (very handy)bla
+_doesn't work on Windows_
+
+### ampy
+[ampy](https://github.com/adafruit/ampy) is used to interact with your esp32 board via serial connection.
+
+### Atom with Pymakr Plugin
+[Atom](https://atom.io/) can be used with the Pymakr Plugin (see [here](https://docs.pycom.io/chapter/pymakr/installation/atom.html) for help). Now you can use the powerful REPL (_Read-Evaluate-Print-Loop_),
+which greatly helps while debubbing or prototyping. You can also run a pre-written script with just a click of a button (without uploading first).
+
+### esptool.py
+[esptool](https://github.com/espressif/esptool) is needed for flashing your esp32 with new firmware.
