@@ -20,7 +20,7 @@ _Caution_: When booting or running the board the LoRa antenna must be connected!
 The flex cable is put in the FFC socket above the ESP32 board. It is to be mounted in such a fashion, that the sensors face upwards when the cable is bent to the right (parallel to the ESP32 board).
 Side note: The Sensirion sensors are powered with 1.8V. The electrical components taking care of voltage generation and conversion (for the I2C bus, including 10k pull-up resistors) are situated on the bottom side of the sensor board - see picture below:
 
-![Top_View_Board](../master/hackTM/pcb/PCB_Bottom_View.png)
+![Top_View_Board](pcb/PCB_Bottom_View.png)
 
 ## PIR
 The PIR sensor is placed on the right side of the sensor board. It produces a digital Signal (TODO high oder low??? ) whenever a motion was detected. The sensor is internally powered by 3.3V. This voltage is generated on the PIR board by a voltage regulator.
