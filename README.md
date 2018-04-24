@@ -14,10 +14,14 @@ A top view of the board is shown below:
 ### ESP32  
 The ESP32 breakout board is put in the socket on the lower left of the board. The usb port is facing outwards, so the board can be powered from an external (USB) power supply.
 On the bottom side of the ESP32 board a small LiPo battery can be connected. Charging this battery takes place via the USB port.  
-_Caution_: When booting or running the board the LoRa antenna must be connected!
+_Caution_: When booting or running the board the LoRa antenna must be connected!  
+[Schematic](https://download.bastelgarage.ch/Datasheet/WIFI_LoRa_32_868_Schema.png)
+[Pinout](https://download.bastelgarage.ch/Datasheet/WIFI_LoRa_32_Pinout.pdf)
 
 ### Flex cable  
-The flex cable is put in the FFC socket above the ESP32 board. It is to be mounted in such a fashion, that the sensors face upwards when the cable is bent to the right (parallel to the ESP32 board).
+The flex cable is put in the FFC socket above the ESP32 board. It is to be mounted in such a fashion, that the sensors face upwards when the cable is bent to the right (parallel to the ESP32 board).  
+[SGP30 Datasheet](https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/0_Datasheets/Gas/Sensirion_Gas_Sensors_SGP30_Datasheet.pdf)  
+[SHTC1 Datasheet](https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/0_Datasheets/Humidity/Sensirion_Humidity_Sensors_SHTC1_Datasheet.pdf)  
 Side note: The Sensirion sensors are powered with 1.8V. The electrical components taking care of voltage generation and conversion (for the I2C bus, including 10k pull-up resistors) are situated on the bottom side of the sensor board - see picture below:
 
 ![Top_View_Board](pcb/PCB_Bottom_View.png)
@@ -29,7 +33,8 @@ Another (prefered and thus default) way to power the PIR Board is the second soc
 This enables the option to surpass the PIR's voltage regulator and save energy by directly supplying 3.3V.  
 Via the solder jumpers labelled 'Single Trigger' and 'Retrigger' it can be selected if retriggering is possible. Retriggering is the possibility of increasing the duration of the digital output signal, when additional motion(s) are detected.
 If 'Single Trigger' is selected the output signal will return to its default state () when a certain time has passed after detecting the first motion. Only now new motions cann trigger the sensor. The pulse length of the output signal can be selected with the left (when mounted upper) trimmable potentiometer.
-The right (when mounted lower) potentiometer adjusts the sensitivity of the PIR sensor.
+The right (when mounted lower) potentiometer adjusts the sensitivity of the PIR sensor.  
+[Example Datasheet](https://www.mpja.com/download/31227sc.pdf)
 
 ## Extras  
 In addition to the previously mentioned features extra pins can be found on the sensor board. These are broken out pins (as well as solder eyelets) to conveniently expand the board.
