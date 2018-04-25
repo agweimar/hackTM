@@ -73,7 +73,8 @@ class SGP30_Sensor:
         return self._run_profile(["raw_measure", [0x20, 0x50], 2, 0.025])
 
     def get_iaq_baseline(self):
-        """Retreive the IAQ algorithm baseline for CO2eq and TVOC"""
+        """Retreive the IAQ algorithm baseline for CO2eq and TVOC
+        Only returns values different from TVOC = 0 and CO2EG = 400, if iaq_init() has been called"""
         # name, command, signals, delay
         return self._run_profile(["iaq_get_baseline", [0x20, 0x15], 2, 0.01])
 
@@ -145,11 +146,18 @@ class SGP30_Sensor:
         return crc & 0xFF
 
     def get_data(self):
-        """Return a dictionary of data"""
+        """Return a dictionary of data
+        The iaq part (CO2EQ and TVOC) only work when iaw_init() has been called before"""
         raw = self.raw_measure()
         iaq = self.iaq_measure()
         data_dict = {'SGP30_H2_RAW': raw[0], 'SGP30_ETOH_RAW': raw[1], 'SGP30_CO2EQ' : iaq[0], 'SGP30_TVOC':iaq[1]}
         return data_dict
+        
+    def soft_reset(self):
+        """Soft reset the sensor via i2c general call
+        CAUTION: Other i2c devices might be reset as well if the respond to the call accordingly
+        If interested in iaq values iaq_init() has to be called after each reset"""
+        self.i2c.writeto(0x00, bytes([0x06]))
 
 
    
