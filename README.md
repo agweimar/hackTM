@@ -24,8 +24,8 @@ The flex cable combines the Sensirion SHTC1 and SGP30. Both of the sensors are a
 For both sensors a convenient micropython driver can be found in the micropython directory. 
 
 #### SGP30  
-The SGP30 can gieve raw readings corresponding to an Ethanol (EtOH) and Hydrogen (H2) signal. However, this chip can do more! If an In-Air-Qualitiy measurement has been initialized, the raw signals are used to calculate  
-the a TVOC signal (total volatile organic compounds) and an CO2 equivalent (CO2eq). These values already underly a dynamic baseline correction performed on-chip. To ensure this corrections works properly, it is advised to perform an iaq measurement once per second.  
+The SGP30 can give raw readings corresponding to an Ethanol (EtOH) and Hydrogen (H2) signal. However, this chip can do more! If an In-Air-Qualitiy measurement has been initialized, the raw signals are used to calculate  
+the a TVOC signal (total volatile organic compounds) and an CO2 equivalent (CO2eq). These values already underly a dynamic baseline correction performed on-chip. To ensure these corrections works properly, it is advised to perform an iaq measurement once per second.  
 The power consumption of the chip can be drastically minimized by soft resetting it. This is done by an i2c general call. Caution is adviced, since other i2c devices might respont to this call as well. After each reset (hard or soft) a new iaq measurement needs to be initialized if it is of interest.
 For additional information see the below datasheet.  
 [SGP30 Datasheet](https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/0_Datasheets/Gas/Sensirion_Gas_Sensors_SGP30_Datasheet.pdf)  
