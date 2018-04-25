@@ -1,10 +1,31 @@
+# The MIT License (MIT)
+#
+# Copyright (c) 2018 AG Weimar 
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 import time
 from machine import I2C
 import machine
 from micropython import const
 from math import exp, isnan
 
-# pylint: disable=bad-whitespace
 _SGP30_DEFAULT_I2C_ADDR  = const(0x58)
 _SGP30_FEATURESET        = const(0x0020)
 
@@ -12,7 +33,7 @@ _SGP30_CRC8_POLYNOMIAL   = const(0x31)
 _SGP30_CRC8_INIT         = const(0xFF)
 _SGP30_WORD_LEN          = const(2)
 
-# pylint: enable=bad-whitespace
+
 
 class SGP30_Sensor:
     """
@@ -47,7 +68,7 @@ class SGP30_Sensor:
         return self._run_profile(["iaq_measure", [0x20, 0x08], 2, 0.05])
 
     def raw_measure(self):
-        """Measure Raw"""
+        """Measure Raw Signals"""
         # name, command, signals, delay
         return self._run_profile(["raw_measure", [0x20, 0x50], 2, 0.025])
 
@@ -73,12 +94,10 @@ class SGP30_Sensor:
 
     def _run_profile(self, profile):
         """Run an SGP 'profile' which is a named command set"""
-        # pylint: disable=unused-variable
-        name, command, signals, delay = profile
-        # pylint: enable=unused-variable
 
-        #print("\trunning profile: %s, command %s, %d, delay %0.02f" %
-        #   (name, ["0x%02x" % i for i in command], signals, delay))
+        name, command, signals, delay = profile
+ 
+
         return self._i2c_read_words_from_cmd(command, delay, signals)
 
 
@@ -102,7 +121,7 @@ class SGP30_Sensor:
         return result
 
     def _i2c_write_words_to_cmd(self,cmd, data):
-        """writes bytes of words including checksum via i2c
+        """Write bytes of words including checksum via i2c,
         data is an array of words"""
         buf = [(cmd>>8),(cmd & 0xFF)]
         for d in data:
@@ -111,11 +130,11 @@ class SGP30_Sensor:
             buf.append(self._generate_crc([d>>8, d & 0xFF]))
         write_size = i2c.writeto(self.address,bytes(buf))
         return write_size
-    # pylint: disable=no-self-use
+
     def _generate_crc(self, data):
         """8-bit CRC algorithm for checking data"""
         crc = _SGP30_CRC8_INIT
-        # calculates 8-Bit checksum with given polynomial
+        # Calculate 8-Bit checksum with given polynomial
         for byte in data:
             crc ^= byte
             for _ in range(8):
@@ -126,34 +145,14 @@ class SGP30_Sensor:
         return crc & 0xFF
 
     def get_data(self):
-        """returns a dictionary of data"""
+        """Return a dictionary of data"""
         raw = self.raw_measure()
         iaq = self.iaq_measure()
         data_dict = {'SGP30_H2_RAW': raw[0], 'SGP30_ETOH_RAW': raw[1], 'SGP30_CO2EQ' : iaq[0], 'SGP30_TVOC':iaq[1]}
         return data_dict
 
 
-    def measure_sample(self):
-        result = self._i2c_read_words_from_cmd([0x37, 0x2D],0.01,8)
-        result = self._adc_to_phys(result)
-        return result
-
-    def _adc_to_phys(self, ints):
-        return {"R_px1": self._adc_to_moxpixel(ints[0]), "R_px2": self._adc_to_moxpixel(ints[1]),
-                "R_px3": self._adc_to_moxpixel(ints[2]), "R_px4": self._adc_to_moxpixel(ints[3]),
-                "U_H": self._adc_to_u_hotplate(ints[4]), "U_B": self._adc_to_u_booster(ints[5]),
-                "T_H": self._adc_to_t_hotplate(ints[6]), "T_C": self._adc_to_t_junction(ints[7])}
-
-
-    def measure_profile(self, profile_index):
-        """Execute the measure profile command and reads the data"""
-        if not isinstance(profile_index, int):
-            raise TypeError("profile_index can only be int")
-        command = (0b00100 << 8) + profile_index
-        command = (command << 3) + self.next_crc(command, 7, 13, 0xB)
-        print(command)
-        data = self._i2c_read_words_from_cmd([command>>8, command & 0xFF],1,8)
-        return data
+   
 if __name__ == '__main__':
     i2c = machine.I2C(scl=machine.Pin(22),sda=machine.Pin(21), freq=10000)
     #print(i2c.scan())
