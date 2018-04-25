@@ -3,7 +3,7 @@
 ## Hardware  
 The sensor board/shield holds three major components, namely:
 * ESP32 breakout board with LoRa antenna and OLED display
-* Flex Cable including I2C addressable Sensirion SHTC01 (rel. humidity and temperature) and SGP30 (four pixel MOX sensor giving a tVOC and eCO_2 reading)
+* Flex Cable including I2C addressable Sensirion SHTC01 (rel. humidity and temperature) and SGP30 (multipixle gas sensor)
 * Passive infrared sensor (PIR) a.k.a. motion sensor
 
 A top view of the board is shown below:
@@ -20,6 +20,8 @@ _Caution_: When booting or running the board the LoRa antenna must be connected!
 
 ### Flex cable  
 The flex cable is put in the FFC socket above the ESP32 board. It is to be mounted in such a fashion, that the sensors face upwards when the cable is bent to the right (parallel to the ESP32 board).  
+The flex cable combines the Sensirion SHTC1 and SGP30. Both of the sensors are accessed via I2C. The former is a sensor for relative humidity and temperature, the latter a multipixle gas sensor.  
+For both sensors a convenient micropython driver can be found in the micropython directory.
 [SGP30 Datasheet](https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/0_Datasheets/Gas/Sensirion_Gas_Sensors_SGP30_Datasheet.pdf)  
 [SHTC1 Datasheet](https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/0_Datasheets/Humidity/Sensirion_Humidity_Sensors_SHTC1_Datasheet.pdf)  
 Side note: The Sensirion sensors are powered with 1.8V. The electrical components taking care of voltage generation and conversion (for the I2C bus, including 10k pull-up resistors) are situated on the bottom side of the sensor board - see picture below:
