@@ -26,11 +26,13 @@ For both sensors a convenient micropython driver can be found in the micropython
 #### SGP30  
 The SGP30 can give raw readings corresponding to an Ethanol (EtOH) and Hydrogen (H2) signal. However, this chip can do more! If an In-Air-Qualitiy measurement has been initialized, the raw signals are used to calculate  
 the a TVOC signal (total volatile organic compounds) and an CO2 equivalent (CO2eq). These values already underly a dynamic baseline correction performed on-chip. To ensure these corrections works properly, it is advised to perform an iaq measurement once per second.  
-The power consumption of the chip can be drastically minimized by soft resetting it. This is done by an i2c general call. Caution is adviced, since other i2c devices might respont to this call as well. After each reset (hard or soft) a new iaq measurement needs to be initialized if it is of interest.
+The power consumption of the chip can be drastically minimized by soft resetting it. This is done by an i2c general call. Caution is adviced, since other i2c devices might respont to this call as well. After each reset (hard or soft) the sensor starts in idle or sleep mode with lower power consumption. If a new iaq measurement is of intereset it needs to be initialized first,
+otherwise the default values are CO2eq = 400 and TVOC = 0.  
 For additional information see the below datasheet.  
 [SGP30 Datasheet](https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/0_Datasheets/Gas/Sensirion_Gas_Sensors_SGP30_Datasheet.pdf)  
 
 #### SHTC1  
+The SHTC1 sensor is a little simpler than the SGP30. It gives values for temperature and relative humidity. The sensor can be soft reseted, but doesn't have a sleep mode due to its already low power consumption.
 [SHTC1 Datasheet](https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/0_Datasheets/Humidity/Sensirion_Humidity_Sensors_SHTC1_Datasheet.pdf)  
 Side note: The Sensirion sensors are powered with 1.8V. The electrical components taking care of voltage generation and conversion (for the I2C bus, including 10k pull-up resistors) are situated on the bottom side of the sensor board - see picture below:
 
@@ -45,6 +47,7 @@ Via the solder jumpers labelled 'Single Trigger' and 'Retrigger' it can be selec
 If 'Single Trigger' is selected the output signal will return to its default state () when a certain time has passed after detecting the first motion. Only now new motions cann trigger the sensor. The pulse length of the output signal can be selected with the left (when mounted upper) trimmable potentiometer.
 The right (when mounted lower) potentiometer adjusts the sensitivity of the PIR sensor.  
 [Example Datasheet](https://www.mpja.com/download/31227sc.pdf)
+[Trigger Explanation](http://www.ladyada.net/media/sensors/BISS0001.pdf)
 
 ## Extras  
 In addition to the previously mentioned features extra pins can be found on the sensor board. These are broken out pins (as well as solder eyelets) to conveniently expand the board.
