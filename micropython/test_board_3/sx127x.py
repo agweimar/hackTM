@@ -94,7 +94,12 @@ class SX127x:
         # check version
         version = self.readRegister(REG_VERSION)
         if version != 0x12:
-            raise Exception('Invalid version.')
+		print("version mismatch (LORA to slow?)")
+		print("found version:"+str(version))
+		# Then dust yourself off and try again. :)
+	        version = self.readRegister(REG_VERSION)
+        	if version != 0x12:
+            		raise Exception('Invalid version.')
             
         
         # put in LoRa and sleep mode

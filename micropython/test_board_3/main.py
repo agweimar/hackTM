@@ -2,7 +2,7 @@
 
 import gc
 import machine
-
+import json
 from time import sleep
 
 import SGP30, SHTC1
@@ -10,6 +10,19 @@ import SGP30, SHTC1
 import sx127x
 import config_lora 
 from config_lora import uuid
+
+
+VERSION=1
+
+def pir_callback(p):
+    global pir_flag
+    print('PIR triggered')
+    pir_flag=True
+
+def timer_irq(timer):
+    global send_flag
+    #print('timer isr')
+    send_flag=True
 
 def send(lora, data_dict):
 
@@ -24,7 +37,6 @@ scl_i2c = machine.Pin(22)
 sda_i2c = machine.Pin(21)
 freq_i2c = 100000
 
-
 # init i2c
 i2c = machine.I2C(scl = scl_i2c, sda = sda_i2c, freq=freq_i2c)
 i2c_devices = i2c.scan()
@@ -35,6 +47,16 @@ i2c = machine.I2C(scl = scl_i2c, sda = sda_i2c, freq=10000)
 sgp = SGP30.SGP30_Sensor(i2c)
 shtc = SHTC1.SHTC1_Sensor(i2c)
 
+# PIR
+pir_pin = machine.Pin(13, machine.Pin.IN, machine.Pin.PULL_DOWN)
+pir_pin.irq(trigger=machine.Pin.IRQ_RISING, handler=pir_callback)
+pir_flag=False
+pir_delay=6*1000
+
+# timer for max send intervals
+timer = machine.Timer(1)
+timer.init(period=pir_delay, mode=machine.Timer.PERIODIC, callback=timer_irq)
+send_flag=False
 
 # Controller(
                # pin_id_led = ON_BOARD_LED_PIN_NO, 
@@ -68,13 +90,26 @@ print('lora', lora)
 
 while 1:
 
-    print("reading sensors")
-    sgp_data = sgp.get_data()
-    shtc_data = shtc.get_data()
-    data_dict = sgp_data
-    data_dict.update(shtc_data)
-    data_dict.update({'node_id':'2', 'node_name': 'wenig_schlitz'})
-    print(data_dict)
-    send(lora, data_dict)
-    gc.collect()
-    sleep(10)
+    if pir_flag==True and send_flag==True:
+        #irq_state = machine.disable_irq()
+        print("reading sensors")
+        sgp_data = sgp.get_data()
+        shtc_data = shtc.get_data()
+        data_dict = sgp_data
+        data_dict.update(shtc_data)
+        #data_dict.update({'node_id':'3', 'node_name': 'sensor steht'})
+        data_dict.update({'mac': uuid})
+        print(data_dict)
+
+        send(lora, json.dumps(data_dict))
+        gc.collect()
+        controller.show_text("sent: OK", x = 0, y = 0, clear_first=True)
+        controller.show_text("MAC:"+uuid, x = 0, y = 8, clear_first=False)
+        controller.show_text("T:" + str(round(shtc_data['T'],1)), x = 0, y = 16, clear_first=False)
+        controller.show_text("RH:" + str(round(shtc_data['RH'],1)), x = 64, y = 16, clear_first=False)
+        controller.show_text("Tv:"+str(sgp_data['SGP30_TVOC']), x = 0, y = 24, clear_first=False)
+        controller.show_text("CO2eq:"+str(sgp_data['SGP30_CO2EQ']), x = 56, y = 24, clear_first=False)
+        #controller.show_text_wrap("sent: OK     MAC:"+uuid+                "T:"+str(int(shtc_data['T']))+                " RH:"+str(int(shtc_data['RH']))+                "     TV:"+str(int(sgp_data['SGP30_TVOC']))+                " CO2EQ:"+str(int(sgp_data['SGP30_CO2EQ'])) )
+        pir_flag=False
+        send_flag=False
+        #machine.enable_irq(irq_state)
