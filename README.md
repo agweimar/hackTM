@@ -3,7 +3,7 @@
 ## Hardware  
 The sensor board/shield holds three major components, namely:
 * ESP32 breakout board with LoRa antenna and OLED display
-* Flex Cable including I2C addressable Sensirion SHTC01 (rel. humidity and temperature) and SGP30 (four pixel MOX sensor giving a tVOC and eCO_2 reading)
+* Flex Cable including I2C addressable Sensirion SHTC01 (rel. humidity and temperature) and SGP30 (multipixle gas sensor)
 * Passive infrared sensor (PIR) a.k.a. motion sensor
 
 A top view of the board is shown below:
@@ -20,7 +20,17 @@ _Caution_: When booting or running the board the LoRa antenna must be connected!
 
 ### Flex cable  
 The flex cable is put in the FFC socket above the ESP32 board. It is to be mounted in such a fashion, that the sensors face upwards when the cable is bent to the right (parallel to the ESP32 board).  
+The flex cable combines the Sensirion SHTC1 and SGP30. Both of the sensors are accessed via I2C. The former is a sensor for relative humidity and temperature, the latter a multipixle gas sensor.  
+For both sensors a convenient micropython driver can be found in the micropython directory. 
+
+#### SGP30  
+The SGP30 can give raw readings corresponding to an Ethanol (EtOH) and Hydrogen (H2) signal. However, this chip can do more! If an In-Air-Qualitiy measurement has been initialized, the raw signals are used to calculate  
+the a TVOC signal (total volatile organic compounds) and an CO2 equivalent (CO2eq). These values already underly a dynamic baseline correction performed on-chip. To ensure these corrections works properly, it is advised to perform an iaq measurement once per second.  
+The power consumption of the chip can be drastically minimized by soft resetting it. This is done by an i2c general call. Caution is adviced, since other i2c devices might respont to this call as well. After each reset (hard or soft) a new iaq measurement needs to be initialized if it is of interest.
+For additional information see the below datasheet.  
 [SGP30 Datasheet](https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/0_Datasheets/Gas/Sensirion_Gas_Sensors_SGP30_Datasheet.pdf)  
+
+#### SHTC1  
 [SHTC1 Datasheet](https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/0_Datasheets/Humidity/Sensirion_Humidity_Sensors_SHTC1_Datasheet.pdf)  
 Side note: The Sensirion sensors are powered with 1.8V. The electrical components taking care of voltage generation and conversion (for the I2C bus, including 10k pull-up resistors) are situated on the bottom side of the sensor board - see picture below:
 
