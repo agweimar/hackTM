@@ -80,3 +80,7 @@ class SHTC1_Sensor:
                 else:
                     crc <<= 1
         return crc & 0xFF
+        
+    def soft_reset(self):
+        """Soft reset the SHTC1"""
+        self.i2c.writeto(self.address, bytes([0x80, 0x5D]))
