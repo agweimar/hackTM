@@ -19,7 +19,7 @@ def pir_callback(p):
     print('PIR triggered')
     pir_flag=True
 
-def timer_irq(timer):
+def timer_callback(timer):
     global send_flag
     #print('timer isr')
     send_flag=True
@@ -48,14 +48,14 @@ sgp = SGP30.SGP30_Sensor(i2c)
 shtc = SHTC1.SHTC1_Sensor(i2c)
 
 # PIR
-pir_pin = machine.Pin(13, machine.Pin.IN, machine.Pin.PULL_DOWN)
-pir_pin.irq(trigger=machine.Pin.IRQ_RISING, handler=pir_callback)
+pir_pin = machine.Pin(13, machine.Pin.IN, machine.Pin.PULL_UP)
+pir_pin.irq(trigger=machine.Pin.IRQ_FALLING, handler=pir_callback)
 pir_flag=False
 pir_delay=6*1000
 
 # timer for max send intervals
 timer = machine.Timer(1)
-timer.init(period=pir_delay, mode=machine.Timer.PERIODIC, callback=timer_irq)
+timer.init(period=pir_delay, mode=machine.Timer.PERIODIC, callback=timer_callback)
 send_flag=False
 
 # Controller(
