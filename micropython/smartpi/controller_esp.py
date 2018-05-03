@@ -1,5 +1,5 @@
 from machine import Pin, SPI, reset
-import config_lora
+import config_sensorboard
 import controller 
  
 
@@ -22,17 +22,11 @@ class Controller(controller.Controller):
     
     
     # ESP config
-    if config_lora.IS_ESP8266:
-        ON_BOARD_LED_PIN_NO = 2
-        ON_BOARD_LED_HIGH_IS_ON = False
-        GPIO_PINS = (0, 1, 2, 3, 4, 5, 12, 13, 14, 15, 16) 
-        
-    if config_lora.IS_ESP32:
-        ON_BOARD_LED_PIN_NO = 2
-        ON_BOARD_LED_HIGH_IS_ON = True
-        GPIO_PINS = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-                     12, 13, 14, 15, 16, 17, 18, 19, 21, 22,
-                     23, 25, 26, 27, 32, 34, 35, 36, 37, 38, 39) 
+    ON_BOARD_LED_PIN_NO = 2
+    ON_BOARD_LED_HIGH_IS_ON = True
+    GPIO_PINS = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+                 12, 13, 14, 15, 16, 17, 18, 19, 21, 22,
+                 23, 25, 26, 27, 32, 34, 35, 36, 37, 38, 39) 
 
     
     def __init__(self,   
@@ -75,25 +69,20 @@ class Controller(controller.Controller):
         spi = None
         id = 1
         
-        if config_lora.IS_ESP8266:
-            spi = SPI(id, baudrate = 10000000, polarity = 0, phase = 0)
+        try:
+            if config_sensorboard.SOFT_SPI: id = -1              
+            spi = SPI(id, baudrate = 10000000, polarity = 0, phase = 0, bits = 8, firstbit = SPI.MSB,
+                      sck = Pin(self.PIN_ID_SCK, Pin.OUT, Pin.PULL_DOWN),
+                      mosi = Pin(self.PIN_ID_MOSI, Pin.OUT, Pin.PULL_UP),
+                      miso = Pin(self.PIN_ID_MISO, Pin.IN, Pin.PULL_UP))
             spi.init()
-            
-        if config_lora.IS_ESP32:
-            try:
-                if config_lora.SOFT_SPI: id = -1              
-                spi = SPI(id, baudrate = 10000000, polarity = 0, phase = 0, bits = 8, firstbit = SPI.MSB,
-                          sck = Pin(self.PIN_ID_SCK, Pin.OUT, Pin.PULL_DOWN),
-                          mosi = Pin(self.PIN_ID_MOSI, Pin.OUT, Pin.PULL_UP),
-                          miso = Pin(self.PIN_ID_MISO, Pin.IN, Pin.PULL_UP))
-                spi.init()
-                    
-            except Exception as e:
-                print(e)
-                if spi: 
-                    spi.deinit()
-                    spi = None
-                reset()  # in case SPI is already in use, need to reset. 
+                
+        except Exception as e:
+            print(e)
+            if spi: 
+                spi.deinit()
+                spi = None
+            reset()  # in case SPI is already in use, need to reset. 
         
         return spi
         
@@ -117,7 +106,6 @@ class Controller(controller.Controller):
             new_spi.transfer = transfer
             new_spi.close = spi.deinit            
             return new_spi
-            
         
     def __exit__(self): 
         self.spi.close()

@@ -1,6 +1,6 @@
 from time import sleep 
 import gc
-import config_lora
+import config_sensorboard
 
 
 PA_OUTPUT_RFO_PIN = 0
@@ -177,7 +177,7 @@ class SX127x:
 
         
     def aquire_lock(self, lock = False):        
-        if not config_lora.IS_MICROPYTHON:  # MicroPython is single threaded, doesn't need lock.
+        if not config_sensorboard.IS_MICROPYTHON:  # MicroPython is single threaded, doesn't need lock.
             if lock:
                 while self._lock: pass
                 self._lock = True
@@ -185,6 +185,15 @@ class SX127x:
                 self._lock = False
             
             
+    def println_pickle(self, pickle, implicitHeader = False):        
+        self.aquire_lock(True)  # wait until RX_Done, lock and begin writing.
+        
+        self.beginPacket(implicitHeader) 
+        self.write(pickle)
+        self.endPacket()  
+
+        self.aquire_lock(False) # unlock when done writing
+
     def println(self, string, implicitHeader = False):        
         self.aquire_lock(True)  # wait until RX_Done, lock and begin writing.
         
@@ -393,6 +402,6 @@ class SX127x:
 
     def collect_garbage(self):
         gc.collect()
-        if config_lora.IS_MICROPYTHON:
+        if config_sensorboard.IS_MICROPYTHON:
             print('[Memory - free: {}   allocated: {}]'.format(gc.mem_free(), gc.mem_alloc()))
             

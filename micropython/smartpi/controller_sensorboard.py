@@ -1,8 +1,26 @@
 import controller_esp
+import config_sensorboard
 import display_ssd1306_i2c
  
+import machine
 
 class Controller(controller_esp.Controller, display_ssd1306_i2c.Display):
+
+    # Sensorboard config
+    PAYLOAD_VERSION=2
+    QOS=0
+
+    PIN_NO_I2C_SCL = 22
+    PIN_NO_I2C_SDA = 21
+    FREQ_I2C = 10000
+
+
+    #WIFI_IP        = '192.168.0.151'
+    #WIFI_SUBNET    = '255.255.255.0'
+    #WIFI_GATEWAY   = '192.168.0.1'
+    #WIFI_DNS       = '84.200.69.80'
+    #WIFI_SSID      = ""
+    #WIFI_PASSWORD  =  ""
 
     # LoRa config
     PIN_ID_FOR_LORA_RESET = 14
@@ -58,9 +76,7 @@ class Controller(controller_esp.Controller, display_ssd1306_i2c.Display):
                                              width = oled_width, height = oled_height, 
                                              scl_pin_id = scl_pin_id, sda_pin_id = sda_pin_id, 
                                              freq = freq)                                             
-        self.show_text('Hello !')                     
-
-
+        
     def add_transceiver(self, 
                         transceiver, 
                         pin_id_ss = PIN_ID_FOR_LORA_SS,
@@ -91,3 +107,74 @@ class Controller(controller_esp.Controller, display_ssd1306_i2c.Display):
             self.show_text('RSSI: {}'.format(rssi), x = 0, y = line_idx * 10, clear_first = False, show_now = False)
             line_idx += 1        
         self.show_text_wrap(payload_string, start_line = line_idx, clear_first = False)
+
+
+    def collect_data(self):
+        print("Reading smartpi values")
+        
+        print("raw sensor data: {0}".format(data))
+    
+        return data
+
+    def assemble_payload(self, data_raw):
+        import pickle
+    
+        data = {}
+        data['mac'] = config_sensorboard.UUID
+        data['payload_version'] = str(self.PAYLOAD_VERSION)
+        data['desc'] = 'smartpi'
+        data['ch1'] = data_raw[0]
+        data['ch2'] = data_raw[1]
+        data['ch3'] = data_raw[2]
+        
+        payload = pickle.dumps(
+                            ",".join(
+                            [
+                            data['mac'],
+                            data['payload_version'],
+                            data['desc'],
+                            #data['QoS'],
+                            #data['scenario_code'],
+                            #round(data['T'], 1),
+                            #round(data['RH'], 1),
+                            data['ch1'],
+                            data['ch2'],
+                            data['ch3']
+                            ]
+                            )
+                            )
+        return payload.decode()
+
+    def lora_send(self, lora, payload):
+    
+        print("LoRa Sender:")
+        print("Sending packet: \n{}\n".format(payload))
+    
+        #lora.println_pickle(payload) 
+        lora.println(payload) 
+
+#    def wifi_connect(self):
+#        import network
+#        
+#        station = network.WLAN(network.STA_IF)
+#     
+#        if station.isconnected() == True:
+#            print("Already connected")
+#            return
+#     
+#        station.active(True)
+#        #station.ifconfig((WIFI_IP,WIFI_SUBNET,WIFI_GATEWAY,WIFI_DNS))
+#        station.connect(WIFI_SSID, WIFI_PASSWORD)
+#     
+#        while station.isconnected() == False:
+#            pass
+#     
+#        print("Connection successful")
+#        print(station.ifconfig())
+#    
+#    def wifi_disconnect(self):
+#        import network
+#        station = network.WLAN(network.STA_IF)
+#        station.disconnect()
+#        station.active(False)
+            
