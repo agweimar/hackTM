@@ -1,12 +1,12 @@
 import controller_esp
 import config_sensorboard
-import display_ssd1306_i2c
+import display_basic
  
 import machine
 
 import SGP30, SHTC1
 
-class Controller(controller_esp.Controller, display_ssd1306_i2c.Display):
+class Controller(controller_esp.Controller, display_basic.Display):
 
     # Sensorboard config
     PAYLOAD_VERSION=2
@@ -73,7 +73,7 @@ class Controller(controller_esp.Controller, display_ssd1306_i2c.Display):
                                            blink_on_start)
                                            
         self.reset_pin(self.prepare_pin(self.PIN_ID_FOR_OLED_RESET))        
-        display_ssd1306_i2c.Display.__init__(self, 
+        display_basic.Display.__init__(self, 
                                              width = oled_width, height = oled_height, 
                                              scl_pin_id = scl_pin_id, sda_pin_id = sda_pin_id, 
                                              freq = freq)                                             
