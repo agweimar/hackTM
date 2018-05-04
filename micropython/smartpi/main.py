@@ -5,7 +5,7 @@ from time import sleep
 import sx127x
 import config_sensorboard
 
-#GPIOs:
+#GPIOs (all input):
 #    0 -> Pin 36
 #    1 -> Pin 37
 #    2 -> Pin 38

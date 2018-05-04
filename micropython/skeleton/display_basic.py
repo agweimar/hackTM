@@ -13,10 +13,10 @@ class Display:
                  
         self.width = width
         self.height = height
-        self.i2c = machine.I2C(scl = machine.Pin(scl_pin_id, machine.Pin.OUT),
+        self.i2c_display = machine.I2C(0,scl = machine.Pin(scl_pin_id, machine.Pin.OUT),
                                sda = machine.Pin(sda_pin_id), 
                                freq = freq) 
-        self.display = ssd1306.SSD1306_I2C(width, height, self.i2c)
+        self.display = ssd1306.SSD1306_I2C(width, height, self.i2c_display)
         self.show = self.display.show
         
 

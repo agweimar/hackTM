@@ -1,10 +1,13 @@
 import controller_esp
 import config_sensorboard
-import display_ssd1306_i2c
- 
-import machine
+import display_basic
 
-class Controller(controller_esp.Controller, display_ssd1306_i2c.Display):
+import machine
+import zlib
+
+import SGP30, SHTC1
+
+class Controller(controller_esp.Controller, display_basic.Display):
 
     # Sensorboard config
     PAYLOAD_VERSION=2
@@ -72,10 +75,17 @@ class Controller(controller_esp.Controller, display_ssd1306_i2c.Display):
                                            blink_on_start)
                                            
         self.reset_pin(self.prepare_pin(self.PIN_ID_FOR_OLED_RESET))        
-        display_ssd1306_i2c.Display.__init__(self, 
+        display_basic.Display.__init__(self, 
                                              width = oled_width, height = oled_height, 
                                              scl_pin_id = scl_pin_id, sda_pin_id = sda_pin_id, 
                                              freq = freq)                                             
+        # init i2c with sensirion sensors
+        self.i2c = machine.I2C(1,scl = machine.Pin(self.PIN_NO_I2C_SCL), sda = machine.Pin(self.PIN_NO_I2C_SDA), freq = self.FREQ_I2C)
+
+        self.sgp = SGP30.SGP30_Sensor(self.i2c)
+        self.shtc = SHTC1.SHTC1_Sensor(self.i2c)
+        #send sgp to sleep
+        self.sgp.soft_reset()
         
     def add_transceiver(self, 
                         transceiver, 
@@ -109,29 +119,43 @@ class Controller(controller_esp.Controller, display_ssd1306_i2c.Display):
         self.show_text_wrap(payload_string, start_line = line_idx, clear_first = False)
 
 
-    def assemble_payload(self, data_raw):
+    def collect_data(self):
+        print("Reading sensors")
+        self.sgp.iaq_init()
+        sgp_data = self.sgp.get_data()
+        shtc_data = self.shtc.get_data()
+
+        # send sgp to sleep
+        self.sgp.soft_reset()
+        
+        data = sgp_data
+        data.update(shtc_data)
+        print("sensirion raw sensor data: {0}".format(data))
     
-        data = {}
-        data['mac'] = config_sensorboard.UUID
-        data['payload_version'] = str(self.PAYLOAD_VERSION)
-        data['desc'] = 'smartpi'
-        data['ch1'] = data_raw[0]
-        data['ch2'] = data_raw[1]
-        data['ch3'] = data_raw[2]
+        return data
+
+    def assemble_payload(self, data):
+    
+        data.update({'mac': config_sensorboard.UUID})
+        data.update({'payload_version': self.PAYLOAD_VERSION})
+        #data.update({'QoS': QOS})
+        #data.update({'scenario_code': scenario_code})
         
         payload = ",".join(str(i) for i in [
                     data['mac'],
                     data['payload_version'],
-                    data['desc'],
                     #data['QoS'],
                     #data['scenario_code'],
-                    #round(data['T'], 1),
-                    #round(data['RH'], 1),
-                    data['ch1'],
-                    data['ch2'],
-                    data['ch3']
+                    round(data['T'], 1),
+                    round(data['RH'], 1),
+                    data['SGP30_CO2EQ'],
+                    data['SGP30_TVOC'],
+                    data['SGP30_ETOH_RAW'],
+                    data['SGP30_H2_RAW']
                     ])
+
         return payload
+        #return payload.decode()
 
     def lora_send(self, lora, payload):
     
