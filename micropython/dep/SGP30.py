@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2018 AG Weimar 
+# Copyright (c) 2018 AG Weimar
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -38,8 +38,9 @@ class SGP30_Sensor:
     A driver for the SGP30 gas sensor.
     """
 
-    def __init__(self, i2c, address=_SGP30_DEFAULT_I2C_ADDR):
+    def __init__(self, i2c, address=_SGP30_DEFAULT_I2C_ADDR, eco_mode = False):
         """Initialize the sensor, get the serial # and verify that we found a proper SGP30"""
+        self.eco_mode = eco_mode #if True no iaq measurement is performed (saving energy)
         self.i2c = i2c
         self.address = address
         # get unique serial, its 48 bits so we store in an array
@@ -53,7 +54,22 @@ class SGP30_Sensor:
         #if featureset[0] != 0x1003:#_SGP30_FEATURESET:
         #   raise RuntimeError('SGP30 Not detected or different featureset')
         #print(featureset)
-        self.iaq_init()
+        if not self.eco_mode:
+            self.iaq_init()
+
+    @property
+    def eco_mode(self):
+        return self.eco_mode
+
+    @eco_mode.setter
+    def eco_mode(self, eco_mode):
+        """Change the eco_mode"""
+        #send to sleep if eco_mode = False, init iaq otherwise
+        self.eco_mode = eco_mode
+        if eco_mode:
+            self.soft_reset()
+        else:
+            self.iaq_init()
 
     def iaq_init(self):
         """Initialize the IAQ algorithm"""
@@ -95,7 +111,7 @@ class SGP30_Sensor:
         """Run an SGP 'profile' which is a named command set"""
 
         name, command, signals, delay = profile
- 
+
 
         return self._i2c_read_words_from_cmd(command, delay, signals)
 
@@ -147,14 +163,15 @@ class SGP30_Sensor:
         """Return a dictionary of data
         The iaq part (CO2EQ and TVOC) only work when iaw_init() has been called before"""
         raw = self.raw_measure()
-        iaq = self.iaq_measure()
+        if not self.eco_mode:
+            iaq = self.iaq_measure()
+        else:
+            iaq = [-1,-1] #dummy values
         data_dict = {'SGP30_H2_RAW': raw[0], 'SGP30_ETOH_RAW': raw[1], 'SGP30_CO2EQ' : iaq[0], 'SGP30_TVOC':iaq[1]}
         return data_dict
-        
+
     def soft_reset(self):
         """Soft reset the sensor via i2c general call
         CAUTION: Other i2c devices might be reset as well if the respond to the call accordingly
         If interested in iaq values iaq_init() has to be called after each reset"""
         self.i2c.writeto(self.address, bytes([0x06]))
-
-
