@@ -18,4 +18,6 @@ millisecond = time.ticks_ms
 # Node Name
 UUID = ubinascii.hexlify(machine.unique_id()).decode()  
 NODE_NAME = 'SensorBoard_' + UUID
+    
 
+     

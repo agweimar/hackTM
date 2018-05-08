@@ -151,7 +151,8 @@ class Controller(controller_esp.Controller, display_basic.Display):
                     data['SGP30_CO2EQ'],
                     data['SGP30_TVOC'],
                     data['SGP30_ETOH_RAW'],
-                    data['SGP30_H2_RAW']
+                    data['SGP30_H2_RAW'],
+                    5
                     ])
 
         return payload
