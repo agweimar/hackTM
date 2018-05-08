@@ -129,13 +129,13 @@ class Controller(controller_esp.Controller, display_basic.Display):
             #increment duration
             self._sgp_dur += 1
             #turn off eco_mode if first on cycle
-            if(self._sgp_dur = 1):
+            if(self._sgp_dur == 1):
                 self.sgp.eco_mode(False)
             #turn on eco_mode if first off cycle
-            elif(self._sgp_dur = self.sgp_on_time + 1 ):
+            elif(self._sgp_dur == self.sgp_on_time + 1 ):
                 self.sgp.eco_mode(True)
                 #reset duration if last  off cycle
-                if(self._sgp_dur = self.sgp_on_time + self.sgp_off_time):
+                if(self._sgp_dur == self.sgp_on_time + self.sgp_off_time):
                     self._sgp_dur = 0
         else:
             if(not self.sgp.eco_mode()):
