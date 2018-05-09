@@ -11,7 +11,7 @@ import SHTC1
 class Controller(controller_esp.Controller, display_basic.Display):
 
     # Sensorboard config
-    PAYLOAD_VERSION=2
+    PAYLOAD_VERSION=99
     QOS=0
 
     PIN_NO_I2C_SCL = 22
