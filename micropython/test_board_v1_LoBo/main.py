@@ -58,7 +58,7 @@ while 1:
             controller.show_text("Tv:"+str(data['SGP30_TVOC']), x = 0, y = 24, clear_first=False)
             controller.show_text("CO2eq:"+str(data['SGP30_CO2EQ']), x = 56, y = 24, clear_first=False)
 
-            pir_flag=False
+        pir_flag=False
         send_flag=False
 
         gc.collect()

@@ -1,18 +1,3 @@
 #!/bin/bash
-cd firmware
-esptool.py --chip esp32 --baud 576000 --port /dev/ttyUSB0 write_flash -z 0x1000 esp32-20180409-v1.9.3-521-gd6cf5c67.bin
+esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after no_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 bootloader.bin 0xf000 phy_init_data.bin 0x10000 MicroPython.bin 0x8000 partitions_mpy.bin
 
-sleep 5
-
-ampy -b 115200 -p /dev/ttyUSB0 reset
-
-cd ../test_board
-for i in $(ls)
-do 
-	ampy -b 115200 -p /dev/ttyUSB0 put $i
-	echo $i "transferred"
-done
-
-ampy -b 115200 -p /dev/ttyUSB0 reset
-
-echo "Finished"
