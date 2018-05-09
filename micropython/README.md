@@ -17,7 +17,8 @@ cd ~
 git clone https://github.com/agweimar/hackTM.git
 git clone https://github.com/loboris/MicroPython_ESP32_psRAM_LoBo.git
 cd ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD
-ln -s ~/hackTM/micropython/dep/* components/micropython/esp32/modules/
+ln -s ~/hackTM/micropython/dep/* components/internalfs_image/image/
+ln -s ~/hackTM/micropython/skeleton/* components/internalfs_image/image/
 [LoBo Instructions](https://github.com/loboris/MicroPython_ESP32_psRAM_LoBo/wiki/build)
 ```
 
@@ -26,6 +27,8 @@ cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/bootloader/bootloader.
 cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/phy_init_data.bin ~/hackTM/micropython/LoBo-firmware/
 cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/MicroPython.bin ~/hackTM/micropython/LoBo-firmware/
 cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/partitions_mpy.bin ~/hackTM/micropython/LoBo-firmware/
+cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/spiffs_image.img ~/hackTM/micropython/LoBo-firmware/
+
 ```
 
 
