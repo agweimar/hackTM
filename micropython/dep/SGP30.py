@@ -40,9 +40,10 @@ class SGP30_Sensor:
 
     def __init__(self, i2c, address=_SGP30_DEFAULT_I2C_ADDR, eco_mode = False):
         """Initialize the sensor, get the serial # and verify that we found a proper SGP30"""
-        self._eco_mode = eco_mode #if True no iaq measurement is performed (saving energy)
-        self.i2c = i2c
         self.address = address
+        self.i2c = i2c
+        self._eco_mode = eco_mode #if True no iaq measurement is performed (saving energy)
+
         # get unique serial, its 48 bits so we store in an array
         self.serial = self._i2c_read_words_from_cmd([0x36, 0x82], 0.01, 3)
         #measure_test
@@ -54,22 +55,24 @@ class SGP30_Sensor:
         #if featureset[0] != 0x1003:#_SGP30_FEATURESET:
         #   raise RuntimeError('SGP30 Not detected or different featureset')
         #print(featureset)
-        if not self.eco_mode:
+        if not self._eco_mode:
             self.iaq_init()
 
-    @property
-    def eco_mode(self):
-        return self._eco_mode
 
-    @eco_mode.setter
-    def eco_mode(self, eco_mode):
-        """Change the eco_mode"""
-        #send to sleep if eco_mode = False, init iaq otherwise
-        self._eco_mode = eco_mode
-        if eco_mode:
-            self.soft_reset()
+
+    def eco_mode(self, eco_mode= None):
+        if (eco_mode == None):
+            return self._eco_mode
         else:
-            self.iaq_init()
+            #send to sleep if eco_mode = False, init iaq otherwise
+            if (self._eco_mode != eco_mode):
+                self._eco_mode = eco_mode
+                if eco_mode:
+                    self.soft_reset()
+                else:
+                    self.iaq_init()
+
+
 
     def iaq_init(self):
         """Initialize the IAQ algorithm"""
@@ -163,7 +166,7 @@ class SGP30_Sensor:
         """Return a dictionary of data
         The iaq part (CO2EQ and TVOC) only work when iaw_init() has been called before"""
         raw = self.raw_measure()
-        if not self.eco_mode:
+        if not self._eco_mode:
             iaq = self.iaq_measure()
         else:
             iaq = [-1,-1] #dummy values
