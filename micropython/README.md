@@ -1,5 +1,3 @@
-
-
 # TODO software
 
 eine config.py für alle relevanten sachen.
@@ -8,13 +6,25 @@ testcode für deepsleep -> lora send (möglicherweise problematisch)
 
 testcode für lora (ping pong mit gateway?)
 
-testcode sensordaten -> couchdb
-
 # TODO doc
 
-power consumption der einzelnen komponenten listen
-
 # TODO hardware
+
+# lobo firmware build
+
+cd ~
+git clone https://github.com/agweimar/hackTM.git
+git clone https://github.com/loboris/MicroPython_ESP32_psRAM_LoBo.git
+cd ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD
+ln -s ~/hackTM/micropython/dep/* components/micropython/esp32/modules/
+[LoBo Instructions](https://github.com/loboris/MicroPython_ESP32_psRAM_LoBo/wiki/build)
+
+cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/bootloader/bootloader.bin ~/hackTM/micropython/LoBo-firmware/
+cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/phy_init_data.bin ~/hackTM/micropython/LoBo-firmware/
+cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/MicroPython.bin ~/hackTM/micropython/LoBo-firmware/
+cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/partitions_mpy.bin ~/hackTM/micropython/LoBo-firmware/
+
+
 
 # Example Code  
 
