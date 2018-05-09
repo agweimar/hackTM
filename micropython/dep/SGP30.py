@@ -40,7 +40,7 @@ class SGP30_Sensor:
 
     def __init__(self, i2c, address=_SGP30_DEFAULT_I2C_ADDR, eco_mode = False):
         """Initialize the sensor, get the serial # and verify that we found a proper SGP30"""
-        self.eco_mode = eco_mode #if True no iaq measurement is performed (saving energy)
+        self._eco_mode = eco_mode #if True no iaq measurement is performed (saving energy)
         self.i2c = i2c
         self.address = address
         # get unique serial, its 48 bits so we store in an array
@@ -59,13 +59,13 @@ class SGP30_Sensor:
 
     @property
     def eco_mode(self):
-        return self.eco_mode
+        return self._eco_mode
 
     @eco_mode.setter
     def eco_mode(self, eco_mode):
         """Change the eco_mode"""
         #send to sleep if eco_mode = False, init iaq otherwise
-        self.eco_mode = eco_mode
+        self._eco_mode = eco_mode
         if eco_mode:
             self.soft_reset()
         else:

@@ -5,7 +5,8 @@ import display_basic
 import machine
 import zlib
 
-import SGP30, SHTC1
+import SGP30
+import SHTC1
 
 class Controller(controller_esp.Controller, display_basic.Display):
 
@@ -85,7 +86,7 @@ class Controller(controller_esp.Controller, display_basic.Display):
         #how long (often) should the sgp measure iaq
         self._sgp_dur = 0
         self.sgp_on_time = max(0, sgp_on_time)
-        slef.sgp_off_time = max(1, sgp_off_time) #off (eco_mode true) at default
+        self.sgp_off_time = max(1, sgp_off_time) #off (eco_mode true) at default
         self.sgp = SGP30.SGP30_Sensor(self.i2c, eco_mode = True)
         self.shtc = SHTC1.SHTC1_Sensor(self.i2c)
 
