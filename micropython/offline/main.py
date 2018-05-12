@@ -25,7 +25,7 @@ pir_pin = machine.Pin(13, machine.Pin.IN, machine.Pin.PULL_DOWN)
 #pir_pin.irq(trigger=machine.Pin.IRQ_FALLING, handler=pir_callback)
 pir_pin.irq(trigger=machine.Pin.IRQ_RISING, handler=pir_callback)
 pir_flag=False
-pir_delay=1000*5
+pir_delay=1000*1
 
 # timer for max send intervals
 ##### timer interrupt and soft reboot dont work well toegether this way --- -> OSError: 261
