@@ -24,7 +24,7 @@ pir_pin = machine.Pin(13, machine.Pin.IN, machine.Pin.PULL_DOWN)
 #pir_pin.irq(trigger=machine.Pin.IRQ_FALLING, handler=pir_callback)
 pir_pin.irq(trigger=machine.Pin.IRQ_RISING, handler=pir_callback)
 pir_flag=False
-pir_delay=1000*10
+pir_delay=1000*5
 
 # timer for max send intervals
 ##### timer interrupt and soft reboot dont work well toegether this way --- -> OSError: 261
@@ -46,10 +46,13 @@ while 1:
         payload = controller.assemble_payload(data)
         if offline_flag:
             data_str = str(utime.ticks_us())
-            for k in data.keys:
-                data_str + = " " + str(data[k]) 
+            for k in data.keys():
+                if (type(data[k]) is float):
+                    data_str += " " + str(round(data[k],1))
+                else:
+                    data_str += " " + str(data[k])
             data_str += "\n\r"
-            with open('log.txt','w') as f:
+            with open('log.txt','a') as f:
                 f.write(data_str)
 
         controller.lora_send(lora, payload)
