@@ -46,7 +46,10 @@ while 1:
         controller.lora_send(lora, payload)
         lora.sleep()
 
-        controller.show_text("sent: OK", x = 0, y = 0, clear_first=True)
+        if pir_flag:
+            controller.show_text("Motion detected", x = 0, y = 0, clear_first=True)
+        else:
+            controller.show_text("No Motion", x = 0, y = 0, clear_first = True)
         controller.show_text("MAC:"+config_sensorboard.UUID, x = 0, y = 8, clear_first=False)
         controller.show_text("T:" + str(round(data['T'],1)), x = 0, y = 16, clear_first=False)
         controller.show_text("RH:" + str(round(data['RH'],1)), x = 64, y = 16, clear_first=False)
