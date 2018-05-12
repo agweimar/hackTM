@@ -8,6 +8,7 @@ import config_sensorboard
 from time import sleep
 
 offline_flag = True
+lora_flag = False
 
 def pir_callback(p):
     global pir_flag
@@ -54,9 +55,9 @@ while 1:
             data_str += "\n\r"
             with open('log.txt','a') as f:
                 f.write(data_str)
-
-        controller.lora_send(lora, payload)
-        lora.sleep()
+        if(lora_flag):
+            controller.lora_send(lora, payload)
+            lora.sleep()
 
         if pir_flag:
             controller.show_text("Motion detected", x = 0, y = 0, clear_first=True)
