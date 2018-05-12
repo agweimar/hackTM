@@ -24,7 +24,7 @@ pir_pin = machine.Pin(13, machine.Pin.IN, machine.Pin.PULL_DOWN)
 #pir_pin.irq(trigger=machine.Pin.IRQ_FALLING, handler=pir_callback)
 pir_pin.irq(trigger=machine.Pin.IRQ_RISING, handler=pir_callback)
 pir_flag=False
-pir_delay=1000*5
+pir_delay=1000*10
 
 # timer for max send intervals
 ##### timer interrupt and soft reboot dont work well toegether this way --- -> OSError: 261
@@ -35,7 +35,11 @@ send_flag=False
 # Initialize controller
 # add lora transceiver
 controller = config_sensorboard.Controller()
-#lora = controller.add_transceiver(sx127x.SX127x(name = 'LoRa'))
+lora = controller.add_transceiver(sx127x.SX127x(name = 'LoRa',
+                                    parameters = {'frequency': 868.3E6, 'tx_power_level': 14, 'signal_bandwidth': 125E3,
+                                        'spreading_factor': 10, 'coding_rate': 1, 'preamble_length': 12,
+                                        'implicitHeader': False, 'sync_word': 0x12, 'enable_CRC': True}
+    ))
 
 gc.collect()
 
@@ -44,19 +48,9 @@ while 1:
     if send_flag==True:
         data = controller.collect_data()
         payload = controller.assemble_payload(data)
-        if offline_flag:
-            data_str = str(utime.ticks_us())
-            for k in data.keys():
-                if (type(data[k]) is float):
-                    data_str += " " + str(round(data[k],1))
-                else:
-                    data_str += " " + str(data[k])
-            data_str += "\n\r"
-            with open('log.txt','a') as f:
-                f.write(data_str)
 
-        #controller.lora_send(lora, payload)
-        #lora.sleep()
+        controller.lora_send(lora, payload)
+        lora.sleep()
 
         if pir_flag:
             controller.show_text("Motion detected", x = 0, y = 0, clear_first=True)
