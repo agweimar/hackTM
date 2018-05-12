@@ -14,7 +14,7 @@ Pin_0.init(mode = machine.Pin.IN, pull = machine.Pin.PULL_UP)
 rtc = machine.RTC()
 rtc.wake_on_ext0(Pin_0,0)
 print('wake reason: ' + str(machine.wake_reason()))
-print('wake reason: ' + str(machien.wake_description())
+print('wake reason: ' + str(machine.wake_description()))
 if (machine.wake_reason() != (3,1)):
     print('going to sleep')
     machine.deepsleep(0)
