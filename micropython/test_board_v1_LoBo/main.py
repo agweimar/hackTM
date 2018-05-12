@@ -40,9 +40,9 @@ gc.collect()
 while 1:
 
     if send_flag==True:
-        #data = controller.collect_data()
-        #payload = controller.assemble_payload(data)
-        payload = "x"
+        data = controller.collect_data()
+        payload = controller.assemble_payload(data)
+       
         controller.lora_send(lora, payload)
         lora.sleep()
 
