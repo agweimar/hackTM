@@ -13,3 +13,6 @@ rear right : 240ac48df9dc
 rear left: 240ac48e2ac0
 indoor: 240ac48debe0
 front bumper: 140ac48eb9d4
+
+Data Format: space separated values
+['ticks_us', 'SGP30_ETOH_RAW', 'RH', 'T', 'SGP30_TVOC', 'SGP30_H2_RAW', 'mac', 'payload_version', 'SGP30_CO2EQ']
