@@ -38,6 +38,10 @@ controller = config_sensorboard.Controller()
 #lora = controller.add_transceiver(sx127x.SX127x(name = 'LoRa'))
 
 gc.collect()
+if offline_flag and not "log.txt" in os.listdir():
+    with open("log.txt", "w") as f:
+        f.write("log file")
+
 
 while 1:
 

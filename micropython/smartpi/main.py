@@ -35,8 +35,15 @@ while True:
         else:
             print('No Data from Raspi')
 
-        if len(data) == 3:
+        if len(data) == 3 and list(data.values()) != ['','','']:
             payload = controller.assemble_payload(data)
+            controller.show_text("1: "+ str(list(data.values()[0])), x = 0, y = 0, clear_first = True)
+            controller.show_text("2: "+ str(list(data.values()[0])), x = 0, y = 8, clear_first = True)
+            controller.show_text("3: "+ str(list(data.values()[0])), x = 0, y = 16, clear_first = True)
             controller.lora_send(lora, payload)
             data={}
+            print (data)
+        else:
+            print("No Data")
+            controller.show_text("No Data", x = 0, y = 0, clear_first = True)
     sleep(3)
