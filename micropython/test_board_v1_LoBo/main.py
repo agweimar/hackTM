@@ -46,8 +46,8 @@ while 1:
         payload = controller.assemble_payload(data)
         if offline_flag:
             data_str = str(utime.ticks_us())
-            for k in data.keys:
-                data_str + = " " + str(data[k]) 
+            for k in data.keys():
+                data_str += " " + str(data[k]) 
             data_str += "\n\r"
             with open('log.txt','w') as f:
                 f.write(data_str)
