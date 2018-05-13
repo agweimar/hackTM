@@ -35,7 +35,10 @@ send_flag=False
 # Initialize controller
 # add lora transceiver
 controller = config_sensorboard.Controller()
-lora = controller.add_transceiver(sx127x.SX127x(name = 'LoRa'))
+lora = controller.add_transceiver(sx127x.SX127x(name = 'LoRa',
+                     parameters = {'frequency': 868.3E6, 'tx_power_level': 14, 'signal_bandwidth': 125E3,
+                               'spreading_factor': 9, 'coding_rate': 1, 'preamble_length': 12,
+                               'implicitHeader': False, 'sync_word': 0x12, 'enable_CRC': True}))
 
 gc.collect()
 
