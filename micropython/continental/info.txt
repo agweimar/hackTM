@@ -1,0 +1,15 @@
+SmUCL Testdrive protocoll 12th May 2018 / HackTM / Timisoara
+(Thomas Heine / Univeristy of Tuebingen / LebensPhasenHaus)
+
+reset of all modules: 15:11 (zero in SmUCL system time)
+
+getting outside to mount modules: 15:33
+Starting car: 15:55
+Starting tour: 15:58
+End Tour: 16:47
+
+Sensor positions:
+rear right : 240ac48df9dc
+rear left: 240ac48e2ac0
+indoor: 240ac48debe0
+front bumper: 140ac48eb9d4
