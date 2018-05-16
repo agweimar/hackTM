@@ -1,6 +1,12 @@
 # hackTM
 
-## Hardware  
+[Hardware overview](#hardware)
+
+[Quickstart](#quickstart)
+
+[Micropython](#mpython)
+
+## Hardware overview <a name="hardware"></a>
 The sensor board/shield holds three major components, namely:
 * ESP32 breakout board with LoRa antenna and OLED display
 * Flex Cable including I2C addressable Sensirion SHTC01 (rel. humidity and temperature) and SGP30 (multipixle gas sensor)
@@ -38,7 +44,7 @@ Side note: The Sensirion sensors are powered with 1.8V. The electrical component
 
 ![Top_View_Board](pcb/PCB_Bottom_View.png)
 
-## PIR
+### PIR
 The PIR sensor is placed on the right side of the sensor board. It produces a digital Signal (logic high) whenever a motion was detected. The sensor is internally powered by 3.3V. This voltage is generated on the PIR board by a voltage regulator.
 The solder jumper labeled 'V_In' on the right side selects the input voltage - either 5V or 3.3V. Keep in mind that the 5V is only 'stable' when powered via USB.
 Another (prefered and thus default) way to power the PIR Board is the second socket strip on the lower side. Originally those pins are designed to select the trigger mode (explained later). However, the outer two pins are connected to ground and 3.3V of the PIR sensor.
@@ -54,10 +60,16 @@ In addition to the previously mentioned features extra pins can be found on the 
 They include the power pins (5V, 3.3V and GND - 5V may be limited to USB use) as well as the I2C pins SDA and SCL (3.3V level). Furthermore 4 GPIOs are broken out. Those can be used for a wide variety of scenarios.
 All of them can be configured via software to be digital or analogue for different I/O devices. These pins could also be used as an SPI bus.
 
-## Quickstart esp32
+
+## Quickstart esp32  <a name="quickstart"></a>
 
 Of course you can use your favourite IDE or even a simple text editor to code. However, below are a few suggestions of tools, that could make your life much easier.  
-In order to copy files to the board you could use different libaries.
+
+
+## Micropython  <a name="mpython"></a>
+In order to start with changing for your needs, start looking in [micropython](micropython)
+
+In order to copy files to the board you could use different libaries:
 
 ### mpy utils  
 [mpy-utils](https://github.com/nickzoic/mpy-utils) establishes a Filesystem in userspace connection to the board and allow you to change files directly on the board. (very handy)bla
@@ -72,3 +84,4 @@ which greatly helps while debubbing or prototyping. You can also run a pre-writt
 
 ### esptool.py
 [esptool](https://github.com/espressif/esptool) is needed for flashing your esp32 with new firmware.
+
