@@ -1,4 +1,4 @@
-# hackTM
+# HackTM 2018 project #smucl
 
 [Hardware overview](#hardware)
 
@@ -17,7 +17,8 @@ A top view of the board is shown below:
 ![Top_View_Board](pcb/PCB_Top_View.png)
 
 
-### ESP32  
+### ESP32 development board 
+
 The ESP32 breakout board is put in the socket on the lower left of the board. The usb port is facing outwards, so the board can be powered from an external (USB) power supply.
 On the bottom side of the ESP32 board a small LiPo battery can be connected. Charging this battery takes place via the USB port.  
 _Caution_: When booting or running the board the LoRa antenna must be connected!  
@@ -61,15 +62,16 @@ They include the power pins (5V, 3.3V and GND - 5V may be limited to USB use) as
 All of them can be configured via software to be digital or analogue for different I/O devices. These pins could also be used as an SPI bus.
 
 
-## Quickstart esp32  <a name="quickstart"></a>
+## Quickstart ESP32  <a name="quickstart"></a>
 
+The ESP32 can be programmed using the Ardunio IDE, the Internet-of-Things Framework from Espressif or using [Micropython](https://micropython.org/). We chose Micropython, because it is very easy to start with and the code is very readable even for coders that are new to python.
 Of course you can use your favourite IDE or even a simple text editor to code. However, below are a few suggestions of tools, that could make your life much easier.  
 
 
 ## Micropython  <a name="mpython"></a>
-In order to start with changing for your needs, start looking in [micropython](micropython)
+In order to start with changing the sources for your needs, start looking in [micropython](micropython)
 
-In order to copy files to the board you could use different libaries:
+You can copy files to and from the board using different libaries:
 
 ### mpy utils  
 [mpy-utils](https://github.com/nickzoic/mpy-utils) establishes a Filesystem in userspace connection to the board and allow you to change files directly on the board. (very handy)bla
