@@ -12,6 +12,8 @@ testcode für lora (ping pong mit gateway?)
 
 # lobo firmware build
 
+[LoBo Instructions/dependencies](https://github.com/loboris/MicroPython_ESP32_psRAM_LoBo/wiki/build)
+
 ```bash
 cd ~
 git clone https://github.com/agweimar/hackTM.git
@@ -21,55 +23,36 @@ rm -rf components/internalfs_image/image/*
 rm components/micropython/esp32/modules/ssd1306.py
 ln -s ~/hackTM/micropython/dep/* components/internalfs_image/image/
 ln -s ~/hackTM/micropython/skeleton/* components/internalfs_image/image/
-./BUILD erase clean
-./BUILD -j4 -v 
-./BUILD makefs
-./BUILD flash flashfs
 ```
-[LoBo Instructions](https://github.com/loboris/MicroPython_ESP32_psRAM_LoBo/wiki/build)
+
+since the ssd1306 uses the framebuffer module you have to enable it first
+```bash
+./BUILD menuconfig
+```
+go to:
+
+MicroPython -> Modules -> [\*] Enable framebuffer 
+
+Then build the firmware and the fs image
 
 ```bash
-cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/bootloader/bootloader.bin ~/hackTM/micropython/LoBo-firmware/
-cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/phy_init_data.bin ~/hackTM/micropython/LoBo-firmware/
-cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/MicroPython.bin ~/hackTM/micropython/LoBo-firmware/
-cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/partitions_mpy.bin ~/hackTM/micropython/LoBo-firmware/
-cp ~/MicroPython_ESP32_psRAM_LoBo/MicroPython_BUILD/build/spiffs_image.img ~/hackTM/micropython/LoBo-firmware/
-
+./BUILD -j4 -v 
+./BUILD makefs
 ```
 
+erase your esp to make sure everything old is gone
 
-
-# Example Code  
-
-## SGP30 and SHTC1
-```python
-#import the libraries
-import SGP30, SHTC1
-import i2c
-
-#initialize i2c
-scl_i2c = machine.Pin(22)
-sda_i2c = machine.Pin(21)
-freq_i2c = 100000
-
-i2c = machine.I2C(scl = scl_i2c, sda = sda_i2c, freq=freq_i2c)
-
-#initialize a SGP30 and SHTC1 object
-
-sgp = SGP30.SGP30_Sensor(i2c)
-shtc = SHTC1.SHTC1_Sensor(i2c)
-
-#read out data in your main loop
-while 1:
-
-    print("reading sensors")
-    sgp_data = sgp.get_data()
-    shtc_data = shtc.get_data()
-    data_dict = sgp_data
-    data_dict.update(shtc_data)
-    print(data_dict)
-    sleep(10)
-    
+```bash
+./BUILD erase
 ```
-TODO sleep, soft reset
+then flash the firmware and fs image
 
+```bash
+./BUILD flash flashfs
+```
+
+Note:
+
+building/flashing the fs image is optional, you can also just use adafruit-ampy
+
+to upload the mycropython files to your board
