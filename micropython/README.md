@@ -2,7 +2,22 @@
 
 .
 +-- upload_to_board.sh 
-
++-- LoBo-firmware
+|   +-- flash_board.sh
+|   +-- ...
++-- dep
+|   +-- ...
++-- skeleton
+|   +-- ...
+|   +-- ...
++-- archived
+|   +-- continental
+|   +-- drone
+|   +-- VEML
+|   +-- sx1276_wei1234
+|   +-- ...
+|   +-- old
+|   |   +-- ...
 
 ## HOWTO: build LoBo firmware
 
@@ -39,7 +54,7 @@ Then build the firmware and the fs image
 ./BUILD.sh makefs
 ```
 
-erase your esp to make sure there are no conflicts with any old firmware
+erase your flash to make sure everything is nice and clean
 
 ```bash
 ./BUILD.sh erase
