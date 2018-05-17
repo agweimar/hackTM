@@ -8,10 +8,6 @@ SOFT_SPI = True
 IS_ESP32 = True
 IS_MICROPYTHON = True
 
-def mac2eui(mac):
-    mac = mac[0:6] + 'fffe' + mac[6:] 
-    return hex(int(mac[0:2], 16) ^ 2)[2:] + mac[2:] 
-    
 # millisecond
 millisecond = time.ticks_ms
 
@@ -21,3 +17,14 @@ NODE_NAME = 'SensorBoard_' + UUID
     
 
      
+offline_flag = True
+
+def pir_callback(p):
+    global pir_flag
+    #print('PIR triggered')
+    pir_flag=True
+
+def timer_callback(timer):
+    global send_flag
+    #print('timer isr')
+    send_flag=True
