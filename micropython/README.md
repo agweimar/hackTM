@@ -1,5 +1,6 @@
 # What's in this directory?
 
+```
 .
 +-- upload_to_board.sh 
 +-- LoBo-firmware
@@ -18,6 +19,7 @@
 |   +-- ...
 |   +-- old
 |   |   +-- ...
+```
 
 ## HOWTO: build LoBo firmware
 
