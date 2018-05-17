@@ -2,7 +2,7 @@
 
 ```
 .
-+-- upload_to_board.sh	- bash script for uploading all *.py files from currect working directory to esp32 boad with ampy
++-- upload_to_board.sh	- script for uploading all *.py files from currect directory to esp32
 +-- LoBo-firmware	- working LoBo MicroPython firmware for our boards
 |   +-- flash_board.sh	- bash script for flashing the firmware
 |   +-- ...
