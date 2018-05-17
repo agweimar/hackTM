@@ -2,22 +2,22 @@
 
 ```
 .
-+-- upload_to_board.sh 
-+-- LoBo-firmware
-|   +-- flash_board.sh
++-- upload_to_board.sh	- bash script for uploading all *.py files from currect working directory to esp32 boad with ampy
++-- LoBo-firmware	- working LoBo MicroPython firmware for our boards
+|   +-- flash_board.sh	- bash script for flashing the firmware
 |   +-- ...
-+-- dep
++-- dep			- dependencies for our sensorboard which you probably won't need to change
 |   +-- ...
-+-- skeleton
++-- skeleton		- 
 |   +-- ...
 |   +-- ...
 +-- archived
-|   +-- continental
-|   +-- drone
-|   +-- VEML
-|   +-- sx1276_wei1234
+|   +-- continental	- continental test drive data
+|   +-- drone		- drone flight data
+|   +-- VEML		- working test code for VEML6040 
+|   +-- sx1276_wei1234	- sx1276 driver examples written by [wei1234](https://github.com/Wei1234c/SX127x_driver_for_MicroPython_on_ESP8266)
 |   +-- ...
-|   +-- old
+|   +-- old		- really old
 |   |   +-- ...
 ```
 
