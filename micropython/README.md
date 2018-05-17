@@ -6,16 +6,15 @@
 +-- LoBo-firmware	- working LoBo MicroPython firmware for our boards
 |   +-- flash_board.sh	- bash script for flashing the firmware
 |   +-- ...
-+-- dep			- dependencies for our sensorboard which you probably won't need to change
++-- dep			- dependencies/drivers for our sensorboard which you probably won't need to change
 |   +-- ...
-+-- skeleton		- 
-|   +-- ...
++-- skeleton		- this is where you want to start developing your application
 |   +-- ...
 +-- archived
 |   +-- continental	- continental test drive data
 |   +-- drone		- drone flight data
 |   +-- VEML		- working test code for VEML6040 
-|   +-- sx1276_wei1234	- sx1276 driver examples written by [wei1234](https://github.com/Wei1234c/SX127x_driver_for_MicroPython_on_ESP8266)
+|   +-- sx1276_wei1234	- sx1276 driver examples written by "Wei1234c"
 |   +-- ...
 |   +-- old		- really old
 |   |   +-- ...
