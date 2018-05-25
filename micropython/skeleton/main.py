@@ -4,6 +4,7 @@ import machine
 import utime
 import sx127x
 from config_sensorboard import *
+import config_sensorboard
 from time import sleep
 
 # PIR
