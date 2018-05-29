@@ -44,6 +44,8 @@ since the ssd1306 uses the framebuffer module you have to enable it first
 ```bash
 ./BUILD.sh menuconfig
 ```
+Make sure your console is at least 19 lines by 80 columns, otherwise this will fail without any message.
+
 go to:
 
 MicroPython -> Modules -> [\*] Enable framebuffer 
