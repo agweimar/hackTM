@@ -126,7 +126,7 @@ class Controller(controller_esp.Controller, display_basic.Display):
         shtc_data = self.shtc.get_data()
 
         # send sgp to sleep
-        self.sgp.soft_reset()
+        #self.sgp.soft_reset()
         
         data = sgp_data
         data.update(shtc_data)

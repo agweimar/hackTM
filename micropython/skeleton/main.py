@@ -24,7 +24,7 @@ update_flag = False
 # PIR
 pir_pin = machine.Pin(13, machine.Pin.IN, machine.Pin.PULL_DOWN)
 #pir_pin.irq(trigger=machine.Pin.IRQ_FALLING, handler=pir_callback)
-pir_pin.irq(trigger=machine.Pin.IRQ_RISING, handler=pir_callback)
+pir_pin.irq(trigger=machine.Pin.IRQ_FALLING, handler=pir_callback)
 
 # timer for max send intervals
 ##### timer interrupt and soft reboot dont work well toegether this way --- -> OSError: 261
@@ -55,11 +55,6 @@ while True:
         data = controller.collect_data()
         payload = controller.assemble_payload(data)
 
-        controller.show_text("MAC:" + config_sensorboard.UUID, x = 0, y = 8, clear_first=True)
-        controller.show_text("T:" + str(round(data['T'],1)), x = 0, y = 16, clear_first=False)
-        controller.show_text("RH:" + str(round(data['RH'],1)), x = 64, y = 16, clear_first=False)
-        controller.show_text("Tv:"+str(data['SGP30_TVOC']), x = 0, y = 24, clear_first=False)
-        controller.show_text("CO2eq:"+str(data['SGP30_CO2EQ']), x = 56, y = 24, clear_first=False)
 
         if offline_flag:
             data_str = str(utime.ticks_us())
@@ -73,6 +68,12 @@ while True:
         controller.lora_send(lora, payload)
         lora.sleep()
         update_flag=False
+
+    controller.show_text("MAC:" + config_sensorboard.UUID, x = 0, y = 8, clear_first=True)
+    controller.show_text("T:" + str(round(data['T'],1)), x = 0, y = 16, clear_first=False)
+    controller.show_text("RH:" + str(round(data['RH'],1)), x = 64, y = 16, clear_first=False)
+    controller.show_text("Tv:"+str(data['SGP30_TVOC']), x = 0, y = 24, clear_first=False)
+    controller.show_text("CO2eq:"+str(data['SGP30_CO2EQ']), x = 56, y = 24, clear_first=False)
 
     if pir_flag:
         controller.show_text("Motion detected", x = 0, y = 0, clear_first=False)
