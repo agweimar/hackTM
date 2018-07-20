@@ -84,8 +84,9 @@ class Controller(controller_esp.Controller, display_basic.Display):
 
         self.sgp = SGP30.SGP30_Sensor(self.i2c)
         self.shtc = SHTC1.SHTC1_Sensor(self.i2c)
+        self.sgp.iaq_init()
         #send sgp to sleep
-        self.sgp.soft_reset()
+        #self.sgp.soft_reset()
         
     def add_transceiver(self, 
                         transceiver, 
@@ -121,7 +122,7 @@ class Controller(controller_esp.Controller, display_basic.Display):
 
     def collect_data(self):
         print("Reading sensors")
-        self.sgp.iaq_init()
+        #self.sgp.iaq_init()
         sgp_data = self.sgp.get_data()
         shtc_data = self.shtc.get_data()
 
