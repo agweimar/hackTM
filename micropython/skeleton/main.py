@@ -51,8 +51,8 @@ gc.collect()
 
 while True:
 
+    data = controller.collect_data()
     if update_flag:
-        data = controller.collect_data()
         payload = controller.assemble_payload(data)
 
 
@@ -80,6 +80,7 @@ while True:
     else:
         controller.show_text("No Motion", x = 0, y = 0, clear_first=False)
 
+    sleep(0.5)
     gc.collect()
     # see above
     #machine.enable_irq(irq_state)
